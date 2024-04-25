@@ -1,0 +1,294 @@
+<%-include('../../header');%>
+<%-include('../../sidebar');%>
+<%-include('../../navbar');%>
+
+<body>
+
+<br>
+
+<div class="container">
+<div class="card">
+  <h5 class="card-header">Daftar Guru</h5>
+  <% if (messages.error) { %>
+    <div class="alert alert-danger" role="alert"><%- messages.error %></div>
+    <% } %>
+    <button type="button" class="btn btn-outline-info bi bi-plus-square" data-bs-toggle="modal" data-bs-target="#tambahguru"></button>
+    <div class="modal fade" id="tambahguru" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Guru</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form form id="formAccountSettings" method="POST" action="guru/tambahguru" onsubmit="return">
+              <div class="row">
+              <div class="col-3">
+                <label for="noIdGuru" name="noIdGuru" class="col-form-label">Id Guru :</label>
+                <input id="noIdGuru" name="noIdGuru" type="text" class="form-control" placeholder="Ter-isi Otomatis" disabled>
+              </div>
+              <div class="col-3">
+                <label for="noIdPengguna" class="col-form-label">Nama Pengguna :</label>
+                <select id="noIdPengguna" name="noIdPengguna" class="form-select form-select-lg">
+                  <option></option>
+                  <%
+                    for (var i=0; i<data_pengguna.length;i++){%>
+                      <option value="<%= data_pengguna[i].noIdPengguna%>"><%=data_pengguna[i].namaPengguna%></option>
+                  <%}%>
+                </select>
+              </div>
+              <div class="col-6">
+                <label for="noIdJabatan" class="col-form-label">Jabatan :</label>
+                <select id="noIdJabatan" name="noIdJabatan" class="form-select form-select-lg" required>
+                              <option></option>
+                              <%
+                                for (var j=0; j <data_jabatan.length;j++){%>
+                                  <option value="<%=data_jabatan[j].noIdJabatan%>"><%=data_jabatan[j].namaJabatan%></option>
+                                  <%}%>
+                            </select>
+              </div>
+              <div class="col-6">
+                <label for="namaGuru" class="col-form-label">Nama Guru :</label>
+                <input id="namaGuru" name="namaGuru" type="text" class="form-control">
+              </div>
+              
+              <div class="col-6">
+                <label for="nomorInduk" class="col-form-label">Nomor Induk :</label>
+                <input id="nomorInduk" name="nomorInduk"  type="text" class="form-control" >
+              </div>
+              <div class="col-3">
+                <label for="tempatLahir" class="col-form-label">Tempat Lahir :</label>
+                <input id="tempatLahir" name="tempatLahir" type="text" class="form-control" >
+              </div>
+              <div class="col-3">
+                <label for="tanggalLahir" class="col-form-label">Tanggal Lahir:</label>
+                <input id="tanggalLahir" name="tanggalLahir" type="date" class="form-control" required>
+              </div>
+              <div class="col-6">
+                <label for="agama" class="col-form-label">Agama:</label>
+                <input id="agama" name="agama" type="text" class="form-control">
+              </div>
+              <div class="col-3">
+                <label for="noHP"  class="col-form-label">No HP:</label>
+                <input id="noHP" name="noHP" type="text" class="form-control">
+              </div>
+              <div class="col-3">
+                <label for="alamat" class="col-form-label">Alamat:</label>
+                <input id="alamat" name="alamat" type="text" class="form-control" >
+              </div>
+              <div class="col-3">
+                <label for="pendidikanTerakhir" class="col-form-label">Pendidikan Terakhir:</label>
+                <input id="pendidikanTerakhir" name="pendidikanTerakhir" type="text" class="form-control" >
+              </div>
+              <div class="col-3">
+                <label for="walikelas" class="col-form-label">Wali Kelas:</label>
+                <input id="walikelas" name="walikelas" type="text" class="form-control" >
+              </div>
+              <br>
+              <div class="mt-2">
+                          <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                      </div>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>  
+    <div class="table-responsive text-nowrap">
+        <table class="table table-striped-columns">
+          <thead>
+            <th >no</th>
+            <th ><%= ti %></th>
+            <th ><%= pat %></th>
+            <th ><%= ma %></th>
+            <th ><%= lan %></th>
+            <th ><%= las %></th>
+            <th colspan="3">Opsi</th>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            <% if(data.length){   
+            var no = 1;            
+            for(var i = 0; i< data.length; i++)
+            {%>
+            <tr>
+              <td id="nomor"><%=no++;%></td>
+              <td><%=data[i].namaJabatan%></td>
+              <td><%=data[i].namaGuru%></td>
+              <td><%=data[i].nomorInduk%></td>
+              <td><%=data[i].noHP%></td>
+              <td><%=data[i].pendidikanTerakhir%></td>
+              <td>
+              <!-- LIHAT GURU -->
+              <button type="button" class="btn btn-outline-primary bi bi-eye" data-bs-toggle="modal" data-bs-target="#lihatguru<%=data[i].noIdGuru%>"></button>
+                <!-- Modal -->
+                <div class="modal fade" id="lihatguru<%=data[i].noIdGuru%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Data Guru <%=data[i].namaGuru%></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form>
+                          <div class="row">
+                            <div class="col-3">
+                              <label for="noIdGuru" class="col-form-label">Id Guru:</label>
+                              <input type="number" class="form-control"  value="<%=data[i].noIdGuru%>" disabled>
+                            </div>
+                            <div class="col-3">
+                              <label for="noIdPengguna" class="col-form-label">Id Pengguna:</label>
+                              <input type="text" class="form-control"  value="<%=data[i].noIdPengguna%>" disabled>
+                            </div>
+                            <div class="col-6">
+                              <label for="noIdJabatan" class="col-form-label">Id-Nama Jabatan</label>
+                              <input type="text" class="form-control" value="<%=data[i].noIdJabatan%>-<%=data[i].namaJabatan%>" disabled>
+                            </div>
+                            <div class="col-6">
+                              <label for="namaGuru" class="col-form-label">Nama Guru:</label>
+                              <input type="text" class="form-control" value="<%=data[i].namaGuru%>" disabled>
+                            </div>
+                            <div class="col-6">
+                              <label for="nomorInduk" class="col-form-label">Nomor Induk</label>
+                              <input type="text" class="form-control" value="<%=data[i].nomorInduk%>" disabled>
+                            </div>
+                            <div class="col-6">
+                              <label for="ttl" class="col-form-label">Tempat, Tanggal Lahir</label>
+                              <% const originalDate = new Date(data[i].tanggalLahir); %>
+                              <% const formattedDate = originalDate.toLocaleDateString(); %>
+                              <input value="<%= data[i].tempatLahir %>, <%= formattedDate %>" type="text" class="form-control" disabled>
+                          </div>
+                            <div class="col-6">
+                              <label for="agama" class="col-form-label">Agama</label>
+                              <input type="text" class="form-control" value="<%=data[i].agama%>" disabled>
+                            </div>
+                            <div class="col-3">
+                              <label for="nohp" class="col-form-label">Nomor HP</label>
+                              <input type="text" class="form-control" value="<%=data[i].noHP%>" disabled>
+                            </div>
+                            <div class="col-3">
+                              <label for="alamat" class="col-form-label">Alamat</label>
+                              <input type="text" class="form-control" value="<%=data[i].alamat%>" disabled>
+                            </div>
+                            <div class="col-3">
+                              <label for="pendidikanTerakhir" class="col-form-label">Pendidikan Terakhir</label>
+                              <input type="text" class="form-control" value="<%=data[i].pendidikanTerakhir%>" disabled>
+                            </div>
+                            <div class="col-3">
+                              <label for="wakel" class="col-form-label">Wali Kelas</label>
+                              <input type="text" class="form-control" value="<%=data[i].walikelas%>" disabled>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            </td>
+            <!---EDIT GURU--->
+            <td>
+              <button type="button" class="btn btn-outline-success bi bi-pencil" data-bs-toggle="modal" data-bs-target="#edit<%=data[i].noIdGuru%>"></button>
+                <div class="modal fade" id="edit<%=data[i].noIdGuru%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Data Guru <%=data[i].namaGuru%></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form id="formAccountSettings" method="post" action="guru/editguru/<%=data[i].noIdGuru%>" onsubmit="return">
+                        <div class="row">
+                          <div class="col-3">
+                            <label for="noIdGuru" class="col-form-label">Id Guru:</label>
+                            <input type="number" class="form-control" name="noIdGuru" value="<%=data[i].noIdPengguna%>"  disabled>
+                          </div>
+                          <div class="col-3">
+                            <label for="noIdPengguna" class="col-form-label">Id Pengguna:</label>
+                            <input type="text" class="form-control" name="noIdPengguna" value="<%=data[i].noIdPengguna%>" disabled>
+                          </div>
+                          <div class="col-6">
+                            <label for="noIdJabatan" class="col-form-label">Id-Nama Jabatan</label>
+                            <select id="noIdJabatan" name="noIdJabatan" class="form-select form-select-lg" >
+                              <option></option>
+                              <% for (var j=0; j <data_jabatan.length; j++) { %>
+                              <option value="<%=data_jabatan[j].noIdJabatan%>"><%=data_jabatan[j].namaJabatan%></option>
+                              <% } %>
+                            </select>
+                          </div>
+                          <div class="col-6">
+                            <label for="namaGuru" class="col-form-label">Nama Guru:</label>
+                            <input type="text" class="form-control" name="namaGuru" value="<%=data[i].namaGuru%>">
+                          </div>
+                          <div class="col-6">
+                            <label for="nomorInduk" class="col-form-label">Nomor Induk</label>
+                            <input type="text" class="form-control" name="nomorInduk" value="<%=data[i].nomorInduk%>">
+                          </div>
+                          <div class="col-3">
+                            <label for="tempatLahir" class="col-form-label">Tempat Lahir</label>
+                            <input value="<%= data[i].tempatLahir %>" type="text" class="form-control" name="tempatLahir">
+                          </div>
+                          <div class="col-3">
+                            <label for="tanggalLahir" class="col-form-label">Tanggal Lahir</label>
+                            <input value="<%= data[i].tanggalLahir %>" type="date" class="form-control" name="tanggalLahir">
+                          </div>
+                          <div class="col-6">
+                            <label for="agama" class="col-form-label">Agama</label>
+                            <input type="text" class="form-control" name="agama" value="<%=data[i].agama%>">
+                          </div>
+                          <div class="col-3">
+                            <label for="nohp" class="col-form-label">Nomor HP</label>
+                            <input type="text" class="form-control" name="noHP" value="<%=data[i].noHP%>">
+                          </div>
+                          <div class="col-3">
+                            <label for="alamat" class="col-form-label">Alamat</label>
+                            <input type="text" class="form-control" name="alamat" value="<%=data[i].alamat%>">
+                          </div>
+                          <div class="col-3">
+                            <label for="pendidikanTerakhir" class="col-form-label">Pendidikan Terakhir</label>
+                            <input type="text" class="form-control" name="pendidikanTerakhir" value="<%=data[i].pendidikanTerakhir%>">
+                          </div>
+                          <div class="col-3">
+                            <label for="wakel" class="col-form-label">Wali Kelas</label>
+                            <input type="text" class="form-control" name="walikelas" value="<%=data[i].walikelas%>">
+                          </div>
+                        </div>
+                        <p>note : nama jabatan dan tanggal lahir tidak boleh kosong,jika tidak diganti mohon isi dengan data lama</p>
+                        <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                      </form>
+
+
+                      </div>
+      
+                    </div>
+                  </div>
+                </div>
+              </td>
+            <td>
+              <a class="btn btn-outline-danger bi bi-trash" href="guru/hapusguru/<%=data[i].noIdGuru%>">
+              </a>
+            </td>
+            </tr>
+            </div>
+            </div>    
+            </center>  
+      <% }                         
+            }else{ %>
+              <tr>
+                <td colspan="12">
+                   <div class="alert alert-danger" role="alert">
+                   Data Tidak Ditemukan !
+                </div>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>  
+  </div>
+</body>

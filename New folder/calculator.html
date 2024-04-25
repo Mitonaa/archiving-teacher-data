@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>JavaScript Projects</title>
+    <meta ID="description" content="">
+    <meta ID="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <style>
+        #output {
+            height: 45px;
+            background-color: black;
+            color: aqua;
+            width: 100%;
+            font-size: 2em;
+            padding: 5px;
+            text-align: right;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+             #mycalcu {
+            width: 350px;
+            background-color: dimgray;
+            height: 350px;
+            padding: 5px;
+        }
+          .cbutton {
+            font-size: 2em;
+            width: 40px;
+            margin: 4px;
+            padding: 4px;
+        }
+        .container {
+            padding: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="mycalcu">
+            <div class="col-xs-12">
+                <div id="output"></div>
+                <div class="col-xs-12">
+                    <div class="btn btn-primary cbutton">1</div>
+                    <div class="btn btn-primary cbutton">2</div>
+                    <div class="btn btn-primary cbutton">3</div>
+                    <div class="btn btn-primary cbutton">+</div>
+                    <div class="btn btn-primary cbutton">C</div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="btn btn-primary cbutton">4</div>
+                    <div class="btn btn-primary cbutton">5</div>
+                    <div class="btn btn-primary cbutton">6</div>
+                    <div class="btn btn-primary cbutton">-</div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="btn btn-primary cbutton">7</div>
+                    <div class="btn btn-primary cbutton">8</div>
+                    <div class="btn btn-primary cbutton">9</div>
+                    <div class="btn btn-primary cbutton">*</div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="btn btn-primary cbutton">.</div>
+                    <div class="btn btn-primary cbutton">0</div>
+                    <div class="btn btn-primary cbutton">=</div>
+                    <div class="btn btn-primary cbutton">/</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var mybtn = document.getElementsByClassName("cbutton");
+        var myOutput = document.getElementById("output");
+        var myCal = '';
+        var myCom = false;
+        var mySwitch = false;
+        var myOpe = ["+", "-", "*", "/"];
+        //console.log(mybtn);
+        for (var i = 0; i < mybtn.length; i++) {
+            mybtn[i].addEventListener("click", function () {
+                var myValue = this.innerHTML;
+                if (myCom || myCal == "0") {
+                    myCom = false;
+                    myCal = '';
+                }
+                if (myValue == "+" || myValue == "-" || myValue == "*" || myValue == "/") {
+                    if (mySwitch) {
+                        mySwitch = false;
+                        if (myOpe.indexOf(myOutput.innerHTML.slice(-1)) > -1) {
+                            myCal = myCal.substring(0, myCal.length - 1);
+                        } else {
+                            myCal = eval(myCal);
+                        }
+                    }
+                    mySwitch = true;
+                }
+                if (myValue == "=") {
+                    myValue = '';
+                    if (myOpe.indexOf(myOutput.innerHTML.slice(-1)) == -1) {
+                        myCal = eval(myCal);
+                    }
+                } else if (myValue == "C") {
+                    myCal = 0;
+                    myCom = true;
+                } else if (myOutput.innerHTML.indexOf(".") > -1 && myValue == ".") {
+                    myValue = '';
+                } else {
+                    myCal = myCal + myValue;
+                }
+                myOutput.innerHTML = myCal;
+            });
+        }
+    </script>
+</body>
+</html>

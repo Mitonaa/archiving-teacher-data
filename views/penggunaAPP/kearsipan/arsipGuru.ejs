@@ -1,0 +1,238 @@
+<%-include('../../header');%>
+<%-include('../../sidebar');%>
+<%-include('../../navbar');%>
+
+<body>
+
+<br>
+
+<div class="container">
+<div class="card">
+  <h5 class="card-header">Daftar Arsip Guru</h5>
+  <% if (messages.error) { %>
+    <div class="alert alert-danger" role="alert"><%- messages.error %></div>
+    <% } %>
+    <button type="button" class="btn btn-outline-info bi bi-plus-square" data-bs-toggle="modal" data-bs-target="#tambahguru"></button>
+    <div class="modal fade" id="tambahguru" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Arsip Guru</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form form id="formAccountSettings" method="POST" action="arsipGuru/tambaharsip" onsubmit="return">
+              <div class="row">
+              <div class="col-3">
+                <label for="noIdArsip" name="noIdArsip" class="col-form-label">Id Arsip :</label>
+                <input id="noIdArsip" name="noIdArsip" type="text" class="form-control" placeholder="Ter-isi Otomatis" disabled>
+              </div>
+              
+              <div class="col-3">
+                <label for="dapodik" class="col-form-label">Dapodik:</label>
+                <input id="dapodik" name="dapodik" type="text" class="form-control" placeholder="1=terdaftar,0=tidak">
+              </div>
+              
+              <div class="col-3">
+                <label for="Thn" class="col-form-label">2 Tahun Mengajar :</label>
+                <input id="Thn" name="Thn"  type="text" class="form-control" placeholder="1=valid,0=tidak">
+              </div>
+              <div class="col-3">
+                <label for="KTP" class="col-form-label">KTP :</label>
+                <input id="KTP" name="KTP" type="text" class="form-control">
+              </div>
+              
+              <div class="col-3">
+                <label for="ijasahSD" class="col-form-label">Ijasah SD:</label>
+                <input id="ijasahSD" name="ijasahSD" type="text" class="form-control">
+              </div>
+              <div class="col-3">
+                <label for="ijasahSMP"  class="col-form-label">Ijasah SMP:</label>
+                <input id="ijasahSMP" name="ijasahSMP" type="text" class="form-control">
+              </div>
+              <div class="col-3">
+                <label for="ijasahSMA" class="col-form-label">Ijasah SMA:</label>
+                <input id="ijasahSMA" name="ijasahSMA" type="text" class="form-control" >
+              </div>
+              <div class="col-3">
+                <label for="ijasahS1" class="col-form-label">ijasah S1:</label>
+                <input id="ijasahS1" name="ijasahS1" type="text" class="form-control" >
+              </div>
+              <div class="col-3">
+                <label for="skPengangkatan" class="col-form-label">SK Pengankatan:</label>
+                <input id="skPengangkatan" name="skPengangkatan" type="text" class="form-control" >
+              </div>
+              <div class="col-3">
+                <label for="skPembagianTugas" class="col-form-label">SK Pembagian Tugas:</label>
+                <input id="skPembagianTugas" name="skPembagianTugas" type="text" class="form-control" >
+              </div>
+              <div class="col-6">
+                <label for="noIdGuru" class="col-form-label">Nama Guru :</label>
+                <select id="noIdGuru" name="noIdGuru" class="form-select form-select-lg">
+                              <option></option>
+                              <%
+                                for (var j=0; j <data_guru.length;j++){%>
+                                  <option value="<%=data_guru[j].noIdGuru%>"><%=data_guru[j].namaGuru%></option>
+                                  <%}%>
+                            </select>
+              </div>
+              <br>
+              <div class="mt-2">
+                          <button type="submit" class="btn btn-primary me-2">Save changes</button>
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </div>
+                      </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+           
+          </div>
+        </div>
+      </div>
+    </div>  
+    <div class="table-responsive text-nowrap">
+        <table class="table table-striped-columns">
+          <thead>
+            <th >no</th>
+            <th ><%=las%></th>
+            <th ><%=ma%></th>
+            <th ><%=nam %></th>
+            <th ><%=juh%></th>
+            <th ><%=pan%></th>
+            <th colspan="3">Opsi</th>
+          </thead>
+          <tbody class="table-border-bottom-0">
+            <% if(data.length){   
+            var no = 1;            
+            for(var i = 0; i< data.length; i++)
+            {%>
+            <tr>
+              <td id="nomor"><%=no++;%></td>
+              <td><%=data[i].namaGuru%></td>
+              <td><%=data[i].ijasahSD%></td>
+              <td><%=data[i].ijasahSMP%></td>
+              <td><%=data[i].ijasahSMA%></td>
+              <td><%=data[i].ijasahS1%></td>
+              <td>
+              <!-- LIHAT GURU -->
+              <button type="button" class="btn btn-outline-primary bi bi-eye" data-bs-toggle="modal" data-bs-target="#lihatArsip<%=data[i].noIdArsip%>"></button>
+                <!-- Modal -->
+                <div class="modal fade" id="lihatArsip<%=data[i].noIdArsip%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Arsip Data Guru <%=data[i].namaGuru%></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form>
+                          <div class="row">
+                            
+                            <div class="col-3">
+                              <label for="noIdGuru" class="col-form-label">Id Arsip:</label>
+                              <input type="number" class="form-control"  value="<%=data[i].noIdArsip%>" disabled>
+                            </div>
+                            <div class="col-3">
+                              <label for="noIdPengguna" class="col-form-label">Id Guru:</label>
+                              <input type="text" class="form-control"  value="<%=data[i].noIdGuru%>" disabled>
+                            </div>
+                            <div class="col-6">
+                              <label for="noIdJabatan" class="col-form-label">Terdaftar di Dapodik</label>
+                              <input type="text" class="form-control" value="<%= data[i].Thn === 1 ? 'Terdaftar' : 'Tidak Terdaftar' %>" disabled>
+                            </div>
+                            <div class="col-6">
+                              <label for="noIdJabatan" class="col-form-label">2 Tahun Mengajar</label>
+                              <input type="text" class="form-control" value="<%= data[i].Thn === 1 ? 'Valid' : 'Tidak Valid' %>" disabled>
+                            </div>
+                            <div class="col-6">
+                              <label for="nomorInduk" class="col-form-label">KTP (PDF) </label>
+                              <input type="text" class="form-control" value="<%=data[i].KTP%>" disabled>
+                            </div>
+                            <div class="col-3">
+                              <label for="ttl" class="col-form-label">Ijasah SD (PDF)</label>
+                              <input value="<%=data[i].ijasahSD%>" type="text" class="form-control" disabled>
+                            </div>
+                            <div class="col-3">
+                              <label for="agama" class="col-form-label">Ijasah (SMP)</label>
+                              <input type="text" class="form-control" value="<%=data[i].ijasahSMP%>" disabled>
+                            </div>
+                            <div class="col-3">
+                              <label for="nohp" class="col-form-label">Ijasah SMK/SMA</label>
+                              <input type="text" class="form-control" value="<%=data[i].ijasahSMA%>" disabled>
+                            </div>
+                            <div class="col-3">
+                              <label for="alamat" class="col-form-label">Ijasah S1</label>
+                              <input type="text" class="form-control" value="<%=data[i].ijasahS1%>" disabled>
+                            </div>
+                            <div class="col-6">
+                              <label for="pendidikanTerakhir" class="col-form-label">SK Pengankatan</label>
+                              <input type="text" class="form-control" value="<%=data[i].skPengangkatan%>" disabled>
+                            </div>
+                            <div class="col-6">
+                              <label for="wakel" class="col-form-label">SK Pembagian Tugas</label>
+                              <input type="text" class="form-control" value="<%=data[i].skPembagianTugas%>" disabled>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            </td>
+            <!---EDIT GURU--->
+            <td>
+              <button type="button" class="btn btn-outline-success bi bi-pencil" data-bs-toggle="modal" data-bs-target="#edit<%=data[i].noIdGuru%>"></button>
+                <div class="modal fade" id="edit<%=data[i].noIdGuru%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Data Guru <%=data[i].namaGuru%></h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form>
+                          <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Recipient:</label>
+                            <input type="text" class="form-control" id="recipient-name">
+                          </div>
+                          <div class="mb-3">
+                            <label for="message-text" class="col-form-label">Message:</label>
+                            <textarea class="form-control" id="message-text"></textarea>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Send message</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            <td>
+              <a class="btn btn-outline-danger bi bi-trash" href="arsipGuru/hapusArsip/<%=data[i].noIdArsip%>">
+              </a>
+            </td>
+            </tr>
+            </div>
+            </div>    
+            </center>  
+      <% }                         
+            }else{ %>
+              <tr>
+                <td colspan="12">
+                   <div class="alert alert-danger" role="alert">
+                   Data Tidak Ditemukan !
+                </div>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>  
+  </div>
+</body>
